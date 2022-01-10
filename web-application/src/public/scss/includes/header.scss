@@ -1,0 +1,197 @@
+@import "colors";
+@import "variables";
+
+& {
+  display: grid;
+  position: fixed;
+  left: 0; right: 0; top: 0;
+  background-color: $header-bg-color;
+  box-shadow: 0 0 20px rgba(0, 0, 0, .15);
+  height: $header-height;
+  z-index: 1;
+
+  & > .container {
+    display: grid;
+    width: 100%;
+    max-width: 1400px;
+    grid-template-columns: auto 1fr;
+    align-items: center;
+    margin: 0 auto;
+    padding: 15px 0;
+
+    & > .logo > a {
+      display: grid;
+      grid-template-columns: auto 1fr;
+      grid-gap: 10px;
+      align-items: center;
+      color: $header-logo-color;
+      padding: 0 15px;
+
+      &:hover {
+        text-decoration: none;
+
+        span:nth-child(2):before {
+          opacity: 1;
+        }
+      }
+
+      span {
+        font-family: 'Alata', sans-serif;
+
+        &:first-child {
+          font-size: 2em;
+        }
+
+        &:nth-child(2) {
+          margin-top: -1px;
+          font-size: .95em;
+          position: relative;
+
+          &:before {
+            content: '';
+            display: block;
+            position: absolute;
+            background-color: $header-logo-color;
+            top: 100%;
+            left: 0;
+            right: 0;
+            margin-top: 1px;
+            height: 2px;
+            opacity: 0;
+            transition: opacity 200ms ease-in;
+          }
+        }
+      }
+    }
+
+    & > .menu {
+      justify-self: end;
+      padding-right: 15px;
+      font-family: 'Alata', sans-serif;
+
+      a {
+        color: $text-color1;
+        position: relative;
+
+        &.active {
+          &:after {
+            opacity: 1;
+          }
+        }
+
+        & i {
+          margin-left: 3px;
+          font-size: .9em;
+        }
+
+        &:after {
+          content: '';
+          display: block;
+          position: absolute;
+          background-color: $text-color1;
+          bottom: -3px;
+          left: 0;
+          right: 0;
+          height: 2px;
+          opacity: 0;
+          transition: opacity 200ms ease-in;
+        }
+
+        &:hover {
+          text-decoration: none;
+
+          &:after {
+            opacity: 1;
+          }
+        }
+      }
+
+      #user {
+        margin-left: 23px;
+        cursor: pointer;
+        padding: 7px 12px;
+        background-color: rgba(0, 0, 0, .1);
+        border: 1px solid transparent;
+        border-radius: 3px;
+        font-weight: 400;
+        font-family: 'Lato', sans-serif;
+        transition: border-color 200ms ease-in;
+        position: relative;
+
+        &.active {
+          border-radius: 0;
+          border-color: $text-color1;
+          border-bottom-color: transparent;
+        }
+
+        #menu {
+          position: absolute;
+          left: -1px; right: -1px; bottom: 20%;
+          margin-top: 40px;
+          border: 1px solid $text-color1;
+
+          background-color: $color2;
+          border-top-color: transparent;
+          display: none;
+          transition: all 200ms ease;
+          transform: translate(0, 100%);
+          opacity: 0;
+
+          a {
+            width: 100%;
+            text-align: center;
+            padding: 10px 0;
+
+            &:after {
+              display: none;
+            }
+          }
+
+          &.active {
+            display: flex;
+          }
+
+          &.ready {
+            opacity: 1;
+            bottom: 0;
+          }
+        }
+
+        &:hover {
+          border-radius: 0;
+          border-color: $text-color1;
+        }
+      }
+    }
+  }
+}
+
+@media only screen and (max-width: 850px) {
+  & {
+    height: $header-height + 40px;
+
+    & > .container {
+      grid-template-columns: 1fr;
+      grid-template-rows: auto auto;
+      justify-content: center;
+
+      & > .logo > a {
+        grid-template-columns: auto auto;
+
+        span {
+          &:first-child {
+            text-align: right;
+          }
+
+          &:nth-child(2):before {
+            display: none;
+          }
+        }
+      }
+
+      & > .menu {
+        // justify-self: center;
+      }
+    }
+  }
+}

@@ -1,0 +1,23 @@
+<div class="container">
+    <div class="logo">
+        <a href="/">
+            <span>SRApp</span>
+            <span>Spotify Reviewer</span>
+        </a>
+    </div>
+    <div class="menu">
+        <nav>
+            <a href="/contact" <% if (locals.currentPage === 'contact') { %>class="active"<% } %>>
+                Contact <i class="far fa-envelope"></i>
+            </a>
+            <% if (locals.email) { %>
+            <span id="user">
+                <%= locals.email %>
+                <div id="menu">
+                    <a href="/disconnect">Log out</a>
+                </div>
+            </span>
+            <% } %>
+        </nav>
+    </div>
+</div>
