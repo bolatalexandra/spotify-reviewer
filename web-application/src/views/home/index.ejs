@@ -1,0 +1,289 @@
+<% const spotify = locals.spotify %>
+
+<div class="home-wrapper">
+    <div class="spotify-wrapper">
+    <% if (!spotify) { %>
+        <div class="buttons">
+            <a href="/connect/spotify" class="button button-spotify hover-none">
+                <i class="fab fa-spotify"></i>
+                <span>Connect with Spotify</span>
+            </a>
+        </div>
+    <% } else { %>
+        <h2 class="connected-as"><i class="fab fa-spotify"></i> Connected as: </h2>
+        <div class="buttons">
+            <a href="<%= spotify.href %>" class="button button-spotify hover-none" target="_blank">
+                <% if (spotify.picture) { %>
+                <img src="<%= spotify.picture %>" alt="avatar" class="avatar">
+                <% } %>
+                <span class="name"><%= spotify.name %></span>
+            </a>
+            <a href="/disconnect/spotify" class="button button-opaque15 hover-none">
+                <span>Disconnect</span>
+            </a>
+        </div>
+        <h3 class="upper-hr"><i class="far fa-star"></i> View your favorites:</h3>
+        <div class="buttons">
+            <a href="/spotify/songs" class="button button-opaque15 hover-none<% if (locals.currentPage === 'songs') {
+            %>  active<% } %>">
+                <span>Songs</span>
+            </a>
+            <a href="/spotify/artists" class="button button-opaque15 hover-none<% if (locals.currentPage === 'artists') {
+            %>  active<% } %>">
+                <span>Artists</span>
+            </a>
+            <a href="/spotify/albums" class="button button-opaque15 hover-none<% if (locals.currentPage === 'albums') {
+            %>  active<% } %>">
+                <span>Albums</span>
+            </a>
+            <a href="/spotify/playlists" class="button button-opaque15 hover-none<% if (locals.currentPage === 'playlists') {
+            %>  active<% } %>">
+                <span>Playlists</span>
+            </a>
+        </div>
+        <% if (spotify.artists) { %>
+        <div class="artists">
+            <h3>Your favorite artists:</h3>
+            <div class="artists-grid">
+                <% spotify.artists.forEach(artist => { %>
+                <div class="artist">
+                    <div class="image">
+                        <img src="<%= artist.picture %>">
+                    </div>
+                    <div class="info">
+                        <a href="<%= artist.href %>" class="name" target="_blank"><%= artist.name %></a>
+                        <ul>
+                            <% artist.genres.forEach(genre => { %>
+                            <li><%= genre %></li>
+                            <% }); %>
+                        </ul>
+                    </div>
+                </div>
+                <% }); %>
+            </div>
+        </div>
+        <% } %>
+        <% if (spotify.playlists) { %>
+        <div class="playlists">
+            <h3>Your favorite playlists:</h3>
+            <div class="playlists-grid">
+                <% spotify.playlists.forEach(playlist => { %>
+                <div class="playlist">
+                    <div class="image">
+                        <img src="<%= playlist.picture %>">
+                    </div>
+                    <div class="info">
+                        <a href="<%= playlist.href %>" class="name" target="_blank"><%= playlist.name %></a>
+                    </div>
+                </div>
+                <% }); %>
+            </div>
+        </div>
+        <% } %>
+        <% if (spotify.songs) { %>
+        <div class="songs">
+            <h3>Your favorite songs:</h3>
+            <div class="songs-grid">
+                <% let i = 1; spotify.songs.forEach(song => { %>
+                    <div class="song">
+                        <span class="no"><%= i %></span>
+                        <span class="artists">
+                            <% i++; song.artists.forEach(artists => { %>
+                                <span class="artist"><%= artists.name %></span>
+                            <% }); %>
+                        </span>
+                        <span class="name"><%= song.name %></span>
+                        <% if (song.preview) { %>
+                        <audio class="audio" controls>
+                            <source src="<%= song.preview %>" type="audio/mpeg">
+                        </audio>
+                        <% } %>
+                        <a href="/spotify/songs/<%= song.id %>" class="review">Review <i class="fas fa-chevron-right"></i></a>
+                    </div>
+                <% }); %>
+            </div>
+        </div>
+        <% } %>
+        <% if (spotify.albums) { %>
+            <div class="albums">
+                <h3>Your favorite albums:</h3>
+                <div class="albums-grid">
+                    <% spotify.albums.forEach(album => { %>
+                        <div class="album">
+                            <div class="image">
+                                <img src="<%= album.picture %>">
+                            </div>
+                            <div class="info">
+                                <a href="<%= album.href %>" class="name" target="_blank"><%= album.name %></a>
+                                <div class="artists">
+                                <% album.artists.forEach(artist => { %>
+                                    <a href="<%= artist.href %>" class="artist"><%= artist.name %></a>
+                                <% }); %>
+                                </div>
+                                <div class="label"><%= album.label %></div>
+                            </div>
+                        </div>
+                    <% }); %>
+                </div>
+            </div>
+        <% } %>
+    <% } %>
+    </div>
+
+    <% if (spotify && spotify.activeSong) { %>
+        <script>
+            let isFirstComment = `<%= spotify.activeSong.comments.length === 0 %>` === 'true';
+            const songId = `<%= spotify.activeSong.id %>`;
+
+            const deleteComment = async (button) => {
+                const { commentId } = button.dataset;
+
+                try {
+                    const res = await fetch('/spotify/comment', {
+                        method: 'DELETE',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ songId, commentId })
+                    });
+                    if (res.ok) {
+                        button.parentElement.remove();
+                        return;
+                    }
+
+                    const data = await res.json();
+                    console.error(data)
+                } catch (err) {
+                    console.error(err);
+                }
+            }
+
+            const addComment = (commentId, commentValue) => {
+                let comments;
+
+                if (isFirstComment) {
+                    comments = document.createElement('div');
+                    comments.classList.add('comments')
+                    document.querySelector('.comments-wrapper').prepend(comments);
+                } else {
+                    comments = document.querySelector('.comments');
+                }
+
+                const commentDiv = document.createElement('div');
+                commentDiv.classList.add('comment');
+                commentDiv.innerHTML = `
+                    <div class="comment-user">
+                        <img src="<%= spotify.picture %>" alt="<%= locals.email %>">
+                    </div>
+                    <span class="comment-text"><strong><%= spotify.name %></strong>: ${commentValue}</span>
+                    <button class="button button-opaque15 comment-delete" data-comment-id=${commentId}>
+                        <i class="fas fa-trash"></i>
+                    </button>
+                `;
+
+                const button = commentDiv.querySelector('.comment-delete');
+                button.addEventListener('click', () => {
+                    deleteComment(button)
+                });
+
+                comments.append(commentDiv);
+
+                isFirstComment = false;
+            }
+
+            window.addEventListener('load', () => {
+                const textArea = document.querySelector('#song-textarea');
+                const submitButton = document.querySelector('#song-submit');
+                const deleteButtons = document.querySelectorAll('.comment-delete');
+
+                submitButton.addEventListener('click', async () => {
+                    try {
+                        const res = await fetch('/spotify/comment', {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({
+                                songId,
+                                comment: textArea.value
+                            })
+                        });
+                        if (res.ok) {
+                            try {
+                                const { commentId } = await res.json();
+                                addComment(commentId, textArea.value)
+                                textArea.value = '';
+                                return;
+                            } catch (err) {
+                                return;
+                            }
+                        }
+
+                        const data = await res.json();
+                        console.error(data)
+                    } catch (err) {
+                        console.error(err);
+                    }
+                });
+
+                deleteButtons.forEach(button => {
+                    button.addEventListener('click', () => deleteComment(button));
+                })
+            });
+        </script>
+
+        <div class="spotify-wrapper">
+            <div class="song">
+                <div class="song-header">
+                    <img class="song-cover" src="<%= spotify.activeSong.album.cover %>" alt="<%= spotify.activeSong.album.name %>">
+                    <div class="song-metadata">
+                        <h1 class="song-name"><a href="<%= spotify.activeSong.href %>" target="_blank"><%= spotify.activeSong.name %></a></h1>
+                        <div class="song-artists">
+                            <i class="fas fa-user-friends" title="Artist"></i>
+                            <% spotify.activeSong.artists.forEach(artist => { %>
+                                <span class="song-artist">
+                            <a href="<%= artist.href %>" target="_blank" ><%= artist.name %></a>
+                         </span>
+                            <% }) %>
+                        </div>
+                        <div class="song-album">
+                            <i class="fas fa-record-vinyl" title="Album"></i> <a href="<%= spotify.activeSong.album.href %>" target="_blank"><%= spotify.activeSong.album.name %></a>
+                        </div>
+                        <div class="song-popularity">
+                            <progress-ring event-id="ring" id="ring" percentage="<%= spotify.activeSong.popularity %>"></progress-ring>
+                        </div>
+                        <div class="song-audio">
+                            <% if (spotify.activeSong.preview) { %>
+                                <audio class="audio" controls>
+                                    <source src="<%= spotify.activeSong.preview %>" type="audio/mpeg">
+                                </audio>
+                            <% } %>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="comments-wrapper">
+            <% if (spotify.activeSong.comments.length > 0) { %>
+                <div class="comments">
+                    <% spotify.activeSong.comments.forEach(data => { %>
+                        <div class="comment">
+                            <div class="comment-user">
+                                <img src="<%= data.picture %>" alt="<%= data.email %>">
+                            </div>
+                            <span class="comment-text"><strong><%= data.name %></strong>: <%= data.comment %></span>
+                            <% if (data.email === locals.email) { %>
+                            <button id="song-delete" class="button button-opaque15 comment-delete" data-comment-id="<%= data.id %>">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                            <% } %>
+                        </div>
+                    <% }) %>
+                </div>
+            <% } %>
+            <div class="new-comment">
+                <textarea id="song-textarea" placeholder="Type your comment..." rows="2"></textarea>
+                <button id="song-submit" class="button button-opaque15 hover-none">Send <i class="fas fa-paper-plane"></i></button>
+            </div>
+        </div>
+    <% } %>
+</div>
+
+
+

@@ -1,0 +1,579 @@
+@import '../../colors';
+
+& > .home-wrapper {
+  padding: 15px;
+
+  & > .spotify-wrapper,
+  & > .comments-wrapper {
+    display: grid;
+    padding: 15px;
+    min-height: 120px;
+    align-items: center;
+    gap: 15px;
+    background-color: $color2;
+    margin: 1rem auto;
+  }
+
+  & > .spotify-wrapper {
+    h1, h2, h3 {
+      font-weight: normal;
+    }
+
+    .upper-hr {
+      padding-top: 15px;
+      border-top: 1px solid $text-color1;
+    }
+
+    .connected-as {
+      font-weight: normal;
+      font-size: 1.2em;
+    }
+
+    .buttons {
+      display: flex;
+
+      & > * {
+        margin-left: 10px;
+
+        &:first-child {
+          margin-left: 0;
+        }
+      }
+    }
+
+    .artists {
+      h3 {
+        margin-bottom: 15px;
+      }
+
+      .artists-grid {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        grid-gap: 20px;
+
+        .artist {
+          display: grid;
+          grid-template-columns: 100px auto;
+          grid-template-rows: 100px;
+          grid-gap: 10px;
+          background-color: $color1;
+          box-shadow: 0 0 5px rgba(0, 0, 0, .15);
+          padding: 10px;
+
+          .image {
+            display: flex;
+            border-radius: 2px;
+            overflow: hidden;
+            align-items: center;
+            justify-content: center;
+
+            img {
+              max-width: 100%;
+              max-height: 100%;
+              border: 1px solid $color3;
+            }
+          }
+          .info {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+
+            .name {
+              font-weight: 700;
+              color: $text-color1;
+            }
+
+            ul {
+              overflow-y: auto;
+              margin: 10px 0;
+              list-style: none;
+              font-weight: 100;
+              text-transform: uppercase;
+              font-size: .8em;
+            }
+          }
+        }
+      }
+    }
+
+    .playlists {
+      h3 {
+        margin-bottom: 15px;
+      }
+
+      .playlists-grid {
+        display: grid;
+        grid-template-columns: repeat(5, 1fr);
+        grid-gap: 20px;
+
+        .playlist {
+          display: grid;
+          grid-template-columns: 1fr;
+          grid-template-rows: auto auto;
+          background-color: $color1;
+          box-shadow: 0 0 10px rgba(0, 0, 0, .15);
+
+          .image {
+            display: flex;
+            border-radius: 2px;
+            overflow: hidden;
+            align-items: start;
+            justify-content: center;
+            min-height: 200px;
+            background-color: $text-color1;
+
+            img {
+              width: 100%; height: auto;
+              border: 1px solid $color3;
+            }
+          }
+          .info {
+            padding: 15px;
+            text-align: center;
+            font-weight: 400;
+            font-size: 1.05em;
+
+            a {
+              color: $text-color1;
+            }
+          }
+        }
+      }
+    }
+
+    .songs {
+      h3 {
+        margin-bottom: 15px;
+      }
+
+      .songs-grid {
+        display: grid;
+        grid-template-columns: 1fr;
+
+        .song {
+          display: grid;
+          grid-template-columns: auto auto 1fr auto;
+          position: relative;
+          width: 100%;
+          background-color: #f1f3f4;
+          padding: 10px 15px;
+          margin: 10px auto;
+          box-shadow: 0 0 5px rgba(0, 0, 0, .15);
+          align-items: center;
+
+          &:first-child {
+            margin-top: 0;
+          }
+
+          &:last-child {
+            border-color: transparent;
+          }
+
+          .no {
+            position: absolute;
+            left: 0; top: 0; bottom: 0;
+            width: 40px;
+            background-color: darken($color3, 40%);
+            color: $color1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 100;
+            font-size: .9em;
+
+            &:after {
+              content: '.';
+            }
+          }
+
+          .artists {
+            display: flex;
+            margin-left: 40px;
+            font-family: "Alata", sans-serif;
+
+            .artist {
+              margin-right: 5px;
+
+              &:after {
+                content: ',';
+              }
+
+              &:last-child {
+                margin-right: 0;
+
+                &:after {
+                  content: ' ';
+                }
+              }
+            }
+          }
+
+          .name {
+            display: flex;
+            margin-top: 2px;
+
+            &:before {
+              padding: 0 5px;
+              content: '⎯';
+            }
+          }
+
+          .audio {
+            align-self: end;
+            margin-left: auto;
+            outline: none;
+            height: 40px;
+          }
+
+          .review {
+            margin-left: 1rem;
+            color: #1ed760;
+            font-weight: bold;
+
+            i {
+              margin-left: 0.25em;
+            }
+          }
+        }
+      }
+    }
+
+    .song {
+      .song-header {
+        display: grid;
+        grid-template-columns: auto 1fr;
+        gap: 1rem;
+      }
+
+      .song-metadata {
+        display: grid;
+        align-content: flex-start;
+        grid-template-columns: 1fr auto;
+        grid-template-rows: repeat(3, auto) 1fr;
+        background-color: $color1;
+      }
+
+      .song-cover {
+        max-width: 275px;
+        box-shadow: 0 0 5px rgba(0, 0, 0, .15);
+      }
+
+      .song-name {
+        font-size: 3.5em;
+        font-weight: 400;
+
+        a {
+          color: #1ed760;
+        }
+      }
+
+      .song-artists {
+        font-size: 1.25rem;
+        margin: 1rem 0;
+
+        .song-artist {
+          a {
+            color: #212121;
+          }
+
+          &::after {
+            content: ', '
+          }
+
+          &:last-child::after {
+            content: '';
+          }
+        }
+      }
+
+      .song-album {
+        font-size: 1.25rem;
+
+        a {
+          color: #212121;
+        }
+      }
+
+      .song-name,
+      .song-artists,
+      .song-album {
+        grid-column: 1 / 2;
+        padding: 0 1rem;
+      }
+
+      .song-popularity {
+        grid-column: 2 / -1;
+        grid-row: 1 / -2;
+        padding: 1rem;
+      }
+
+      .song-audio {
+        grid-column: 1 / -1;
+        align-self: flex-end;
+        background: #f1f3f4;
+        border-top: 2px solid #1ed760;
+
+        audio {
+          width: 100%;
+        }
+      }
+    }
+
+    .albums {
+      h3 {
+        margin-bottom: 15px;
+      }
+
+      .albums-grid {
+        display: grid;
+        grid-template-columns: repeat(5, 1fr);
+        grid-gap: 20px;
+
+        .album {
+          display: grid;
+          grid-template-columns: 1fr;
+          grid-template-rows: auto auto;
+          background-color: $color1;
+          box-shadow: 0 0 10px rgba(0, 0, 0, .15);
+
+          .image {
+            display: flex;
+            overflow: hidden;
+            align-items: start;
+            justify-content: center;
+            background-color: transparentize($text-color1, .05);
+
+            img {
+              width: auto; height: 100%;
+            }
+          }
+          .info {
+            text-align: center;
+            font-weight: 400;
+            font-size: 1.05em;
+            display: grid;
+            grid-template-columns: 1fr;
+            grid-template-rows: auto 1fr auto;
+
+            .name {
+              display: block;
+              background-color: $text-color1;
+              padding: 15px 5px;
+              align-self: start;
+              font-family: "Alata", sans-serif;
+              color: $color1;
+              text-decoration: none;
+
+              &:hover {
+                & ~ .artists {
+                  background-color: $text-color1;
+                  .artist {
+                    color: $color1;
+                  }
+                }
+                & ~ .label {
+                  background-color: $text-color1;
+                }
+              }
+            }
+
+            .artists {
+              padding: 10px 5px;
+              transition: all 200ms ease-in;
+
+              a {
+                color: $text-color1;
+
+                &:after {
+                  content: ',';
+                }
+
+                &:last-child {
+                  &:after {
+                    content: '';
+                  }
+                }
+              }
+            }
+
+            .label {
+              text-transform: uppercase;
+              font-size: .7em;
+              padding: 7px 5px;
+              color: $color3;
+              transition: all 200ms ease-in;
+            }
+          }
+        }
+      }
+    }
+  }
+
+  & > .comments-wrapper {
+    button,
+    textarea {
+      font-family: 'Lato', sans-serif;
+    }
+
+    textarea {
+      border: none;
+      outline: none;
+      padding: 1rem;
+
+    }
+
+    .comments {
+      display: grid;
+      gap: 1rem;
+      padding-bottom: 1rem;
+      border-bottom: 1px solid;
+      margin-bottom: 1rem;
+
+      .comment {
+        position: relative;
+        display: grid;
+        grid-template-columns: auto 1fr;
+        gap: 1rem;
+        //align-items: flex-start;
+
+        .comment-user {
+          & > img {
+            max-width: 65px;
+            box-shadow: 0 0 5px rgba(0, 0, 0, .15);
+          }
+        }
+
+        .comment-text {
+          background: $color1;
+          padding: 1rem;
+        }
+
+        .comment-delete {
+          right: 0.75rem; top: 0.75rem;
+          position: absolute;
+        }
+      }
+    }
+
+    .new-comment {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 15px;
+
+      textarea {
+        max-height: 70px;
+        font-size: 1.25em;
+        resize: horizontal;
+      }
+    }
+  }
+}
+
+@media only screen and (max-width: 1300px) {
+  & > .home-wrapper {
+    & > .spotify-wrapper {
+      .albums {
+        .albums-grid {
+          grid-template-columns: repeat(4, 1fr);
+        }
+      }
+    }
+  }
+}
+
+@media only screen and (max-width: 1100px) {
+  & > .home-wrapper {
+    & > .spotify-wrapper {
+      .artists {
+        .artists-grid {
+          grid-template-columns: repeat(3, 1fr);
+        }
+      }
+      .playlists {
+        .playlists-grid {
+          grid-template-columns: repeat(4, 1fr);
+        }
+      }
+      .albums {
+        .albums-grid {
+          grid-template-columns: repeat(3, 1fr);
+        }
+      }
+    }
+  }
+}
+
+@media only screen and (max-width: 850px) {
+  & > .home-wrapper {
+    & > .spotify-wrapper {
+      .artists {
+        .artists-grid {
+          grid-template-columns: repeat(2, 1fr);
+        }
+      }
+    }
+  }
+}
+
+@media only screen and (max-width: 800px) {
+  & > .home-wrapper {
+    & > .spotify-wrapper {
+      .playlists {
+        .playlists-grid {
+          grid-template-columns: repeat(3, 1fr);
+        }
+      }
+      .songs {
+        .songs-grid {
+          .song {
+            grid-template-columns: auto 1fr;
+            grid-template-rows: auto auto;
+
+            .audio {
+              width: 100%;
+              align-self: center;
+              grid-column-start: 1;
+              grid-column-end: 3;
+              padding-left: 35px;
+              margin-top: 10px;
+            }
+          }
+        }
+      }
+      .albums {
+        .albums-grid {
+          grid-template-columns: repeat(2, 1fr);
+        }
+      }
+    }
+  }
+}
+
+@media only screen and (max-width: 600px) {
+  & > .home-wrapper {
+    & > .spotify-wrapper {
+      .albums {
+        .albums-grid {
+          grid-template-columns: 1fr;
+        }
+      }
+    }
+  }
+}
+
+@media only screen and (max-width: 600px) {
+  & > .home-wrapper {
+    & > .spotify-wrapper {
+      .artists {
+        .artists-grid {
+          grid-template-columns: repeat(1, 1fr);
+        }
+      }
+      .playlists {
+        .playlists-grid {
+          grid-template-columns: repeat(2, 1fr);
+        }
+      }
+    }
+  }
+}
