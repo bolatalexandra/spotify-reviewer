@@ -1,0 +1,32 @@
+version: "3.9"
+services:
+  mysql:
+    image: mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: spotify_secret_password
+      MYSQL_DATABASE: spotify_reviewer
+    networks:
+      - micro-net
+  usr-mgmt:
+    image: usrm
+    networks:
+      - micro-net
+    ports:
+      - "4000:4000"
+    depends_on:
+      - mysql
+  spotify-connector:
+    image: spotc
+    networks:
+      - micro-net
+    ports:
+      - "3000:3000"
+  web-application:
+    image: weba
+    networks:
+      - micro-net
+    ports:
+      - "8080:8080"
+
+networks:
+  micro-net:
